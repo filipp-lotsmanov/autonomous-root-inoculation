@@ -1,0 +1,48 @@
+[project]
+name = "autonomous-root-inoculation"
+version = "1.0.0"
+description = "Autonomous root inoculation system: U-Net segmentation, PID/RL robot control, and integrated pipeline for the OT-2 platform"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12"
+authors = [
+    { name = "Filipp Lotsmanov" }
+]
+
+dependencies = [
+    "tensorflow>=2.16",
+    "tensorflow-intel>=2.16; sys_platform == 'win32'",
+    "opencv-python>=4.8",
+    # Capped below 2.0: the released U-Net weights are a Keras 2 HDF5 file and
+    # deserializing them relies on NumPy 1.x array semantics.
+    "numpy>=1.26,<2.0",
+    "scipy>=1.11",
+    "scikit-image>=0.21",
+    "pandas>=2.1",
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+]
+
+[project.optional-dependencies]
+rl = [
+    "stable-baselines3>=2.2",
+    "gymnasium>=0.29",
+    "shimmy>=2.0",
+    "clearml>=2.0",
+    "pybullet>=3.2",
+]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.uv]
+# tensorflow-io-gcs-filesystem is pulled in transitively but only used for
+# remote (GCS/S3) filesystem access, which this project never touches. The
+# 'never' marker drops it: it has no wheels for some platform/Python
+# combinations and would otherwise block resolution.
+override-dependencies = [
+    "tensorflow-io-gcs-filesystem; sys_platform == 'never'",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Model weights (use GitHub Releases)
+*.h5
+*.hdf5
+*.pth
+
+# Simulation assets (course-provided, local testing only)
+sim_class.py
+custom.urdf
+*.urdf
+*.stl
+meshes/
+textures/
+
+# Test data and generated outputs
+plots/
+Kaggle/
+pipeline_results/
+Integration_pipeline/
+cv_pipeline/
+benchmark_results/
+setup_plant_detection.png
+setup_test_result.png
+
+# Training artifacts
+runs/
+*.zip
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment
+.env
