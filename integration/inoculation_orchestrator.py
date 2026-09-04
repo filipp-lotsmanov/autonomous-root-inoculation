@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from pathlib import Path
-from typing import Tuple, Dict, List, Optional
+from typing import Tuple, List
 import time
 from datetime import datetime
 
@@ -158,8 +158,7 @@ class MotionController:
         return float(np.linalg.norm(target - current))
     
     def _execute_settling_pause(self, robot_id: int, duration_steps: int):
-        """Hold position for settling."""
-        robot_index = self.sim.robotIds.index(robot_id)
+        """Hold position for settling. All robots hold, so no index is needed."""
         num_robots = len(self.sim.robotIds)
         hold_action = [[0, 0, 0, 0]] * num_robots
         self.sim.run(hold_action, num_steps=duration_steps)
@@ -184,7 +183,7 @@ class MotionController:
         self.sim.run(settling_action, num_steps=self.cfg.DROP_SETTLE_STEPS)
         
         if self.cfg.VERBOSE:
-            print(f"    ✓ Dispense completed")
+            print("    ✓ Dispense completed")
 
 
 class AutomatedInoculationOrchestrator:
@@ -224,7 +223,9 @@ class AutomatedInoculationOrchestrator:
         
         # Apply detection filter
         if self.cfg.REQUIRE_DETECTED_FLAG and 'Detected' in data.columns:
-            valid_targets = data[data['Detected'] == True].copy()
+            # Explicit == True: the flag arrives from a CSV and may parse as
+            # object dtype, where truthiness would accept any non-empty string.
+            valid_targets = data[data['Detected'] == True].copy()  # noqa: E712
             print(f" Filtered to {len(valid_targets)} validated targets (from {len(data)})")
         else:
             valid_targets = data.copy()
@@ -356,7 +357,7 @@ class AutomatedInoculationOrchestrator:
         print(f" Success Rate: {successful_runs}/{total_runs} ({success_percentage:.1f}%)")
         print(f"  Total iterations: {total_iters}")
 
-        successful_data = results[results['Success'] == True]
+        successful_data = results[results['Success'] == True]  # noqa: E712
         if len(successful_data) > 0:
             errors = successful_data['Final Error (mm)']
             print(f"  Mean error:   {errors.mean():.3f} mm")
@@ -366,9 +367,9 @@ class AutomatedInoculationOrchestrator:
             
             # Requirement check
             if errors.mean() <= 1.0:
-                print(f"Within 1mm requirement")
+                print("Within 1mm requirement")
             else:
-                print(f"Exceeds 1mm requirement")
+                print("Exceeds 1mm requirement")
         
         # Efficiency metrics
         if len(results) > 0:

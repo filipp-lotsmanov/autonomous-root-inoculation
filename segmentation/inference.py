@@ -3,7 +3,6 @@ from tensorflow import keras
 from tensorflow.keras import backend as K
 import numpy as np
 import cv2
-from pathlib import Path
 from typing import Dict, Tuple
 
 CONFIG = {

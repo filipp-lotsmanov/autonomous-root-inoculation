@@ -36,7 +36,7 @@ for episode in range(NUM_EPISODES):
 
 env.close()
 
-print(f"\n--- Summary ---")
+print("\n--- Summary ---")
 print(f"Success rate:       {100 * np.mean(successes):.1f}%")
 print(f"Mean final distance: {np.mean(final_distances):.2f} mm")
 print(f"Mean steps:         {np.mean(episode_lengths):.1f}")

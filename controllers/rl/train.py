@@ -68,7 +68,6 @@ task.execute_remotely(queue_name=CLEARML_QUEUE)
 # ============================================================================
 # ML IMPORTS (AFTER execute_remotely)
 # ============================================================================
-import gymnasium as gym
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import BaseCallback
 
@@ -148,7 +147,8 @@ class OT2Callback(BaseCallback):
             print(f"Average episode length: {np.mean(self.episode_lengths):.1f} steps")
             print(f"Average final distance: {1000 * np.mean(self.episode_final_distances):.3f} mm")
 
-            successful_lengths = [l for l, s in zip(self.episode_lengths, self.episode_successes) if s]
+            successful_lengths = [length for length, ok
+                                  in zip(self.episode_lengths, self.episode_successes) if ok]
             if successful_lengths:
                 print(f"Successful episodes avg length: {np.mean(successful_lengths):.1f} steps")
 
@@ -167,7 +167,7 @@ lr_str = format_lr(args.learning_rate)
 filename = f"{timestamp}_{RUN_LABEL}_lr{lr_str}_b{args.batch_size}_s{args.n_steps}_reward{args.reward_type}"
 
 print("=" * 60)
-print(f"Training Configuration:")
+print("Training Configuration:")
 print(f"  Run label: {RUN_LABEL}")
 print(f"  Learning Rate: {args.learning_rate}")
 print(f"  Batch Size: {args.batch_size}")

@@ -71,7 +71,7 @@ def unet_inference(images: Dict[str, np.ndarray]) -> Dict[str, np.ndarray]:
         
         print(f" Saved masks to: {mask_dir}")
     
-    print(f"Model part complete")
+    print("Model part complete")
     return masks
 
 
@@ -100,7 +100,7 @@ def instance_segmentation(images: Dict[str, np.ndarray],
         visualize=config.SAVE_VISUALIZATIONS
     )
     
-    print(f"Instance Segmentation complete")
+    print("Instance Segmentation complete")
     return results
 
 
@@ -225,7 +225,7 @@ def length_calculation(images_processed: Dict) -> pd.DataFrame:
     # Save CSV
     results_dir = config.OUTPUT_DIR / 'results'
     results_dir.mkdir(exist_ok=True)
-    csv_path = results_dir / 'submission7.csv'
+    csv_path = results_dir / 'root_lengths.csv'
     df.to_csv(csv_path, index=False)
 
     # Save root tip coordinates. This is the handoff to integration/ — the
@@ -256,17 +256,17 @@ def print_summary(images, masks, results, df):
         print(f"  Mean length: {df['Length (px)'].mean():.1f} pixels")
     
     print(f"\nOutput Directory: {config.OUTPUT_DIR}/")
-    print(f"  Structure:")
+    print("  Structure:")
     if config.SAVE_UNET_MASKS:
-        print(f"    unet_masks/           - U-Net predictions")
+        print("    unet_masks/           - U-Net predictions")
     if config.SAVE_VISUALIZATIONS:
-        print(f"    visualizations/       - Segmentation visualizations")
+        print("    visualizations/       - Segmentation visualizations")
     if config.SAVE_PLANTS:
-        print(f"    individual_plants/    - Individual plant masks")
+        print("    individual_plants/    - Individual plant masks")
     if config.SAVE_ROOTS:
-        print(f"    individual_roots/     - Individual root masks")
-    print(f"    root_tips_pixels.csv  - Root tip coordinates (input to integration/)")
-    print(f"    results/              - submission7.csv")
+        print("    individual_roots/     - Individual root masks")
+    print("    root_tips_pixels.csv  - Root tip coordinates (input to integration/)")
+    print("    results/              - root_lengths.csv")
 
 
 def main():
@@ -307,7 +307,7 @@ def main():
         print(" Pipeline interrupted by user")
         sys.exit(1)
     except Exception as e:
-        print(f" Pipeline failed with error:")
+        print(" Pipeline failed with error:")
         print(f"   {str(e)}")
         import traceback
         traceback.print_exc()

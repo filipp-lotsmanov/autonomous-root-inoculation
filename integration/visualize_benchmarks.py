@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from matplotlib.patches import Rectangle
 import json
 
 # Set style
@@ -150,7 +149,7 @@ def create_comprehensive_visualizations(df_summary, df_detailed, aggregate_stats
         ax7.legend(ncol=5, fontsize=8)
         ax7.grid(True, alpha=0.3)
     
-    plt.suptitle('Task 13: System Performance Benchmark Analysis', fontsize=16, fontweight='bold')
+    plt.suptitle('System Performance Benchmark Analysis', fontsize=16, fontweight='bold')
     
     # Save
     viz_path = Path(output_dir) / 'benchmark_analysis.png'
@@ -171,7 +170,7 @@ PERFORMANCE SUMMARY
 
 Success Rate:    {aggregate_stats['mean_success_rate']:.1f}%
 Mean Error:      {aggregate_stats['mean_positioning_error_mm']:.3f} mm
-Std Dev Error:   {aggregate_stats['std_positioning_error_mm']:.3f} mm
+Run-to-Run Std:  {aggregate_stats['std_positioning_error_mm']:.3f} mm
 Best Run:        {aggregate_stats['best_error_mm']:.3f} mm
 Worst Run:       {aggregate_stats['worst_error_mm']:.3f} mm
 
@@ -239,7 +238,7 @@ Requirement Compliance:
             bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.8))
     ax4.set_title('Requirement Compliance', fontsize=14, fontweight='bold')
     
-    plt.suptitle('Task 13: Benchmark Summary Dashboard', fontsize=16, fontweight='bold')
+    plt.suptitle('Benchmark Summary Dashboard', fontsize=16, fontweight='bold')
     
     # Save
     output_path = Path(output_dir) / 'benchmark_dashboard.png'

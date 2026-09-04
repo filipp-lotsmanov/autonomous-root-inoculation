@@ -7,7 +7,6 @@ This is a manual script, not part of the pytest suite in tests/.
 """
 from ot2_env import OT2Env
 from stable_baselines3.common.env_checker import check_env
-import numpy as np
 
 def main():
     env = OT2Env(render=False, max_steps=1000)
@@ -44,7 +43,7 @@ def main():
 
     env.close()
 
-    print(f"\n--- Test Complete ---")
+    print("\n--- Test Complete ---")
     print(f"Total steps:    {total_steps}")
     print(f"Episodes:       {episodes}")
     print(f"Goal reached:   {successes}")

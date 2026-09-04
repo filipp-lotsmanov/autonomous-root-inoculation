@@ -2,9 +2,8 @@ import numpy as np
 import cv2
 from pathlib import Path
 from scipy.ndimage import label as scipy_label
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple
 import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
 
 
 class PlantSegmenter:
@@ -537,8 +536,8 @@ def process_all(images: Dict[str, np.ndarray],
         print(f" Saved {sum(len(paths) for paths in plant_paths.values())} plant masks")
 
     if save_roots:
-        root_paths = exporter.save_root_masks(results, full_resolution=roots_full_size)
-        print(f" Saved root masks")
+        exporter.save_root_masks(results, full_resolution=roots_full_size)
+        print(" Saved root masks")
 
     return results
 

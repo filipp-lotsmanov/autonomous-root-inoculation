@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
-from typing import Tuple, List, Optional, Dict
-from pathlib import Path
+from typing import Tuple, Optional, Dict
 from dataclasses import dataclass
 
 
@@ -272,7 +271,7 @@ class SpatialTransformationEngine:
             'passed': deviations.max() < 0.01
         }
         
-        print(f"  Round-trip deviation (pixels):")
+        print("  Round-trip deviation (pixels):")
         print(f"    Mean: {stats['mean_error_px']:.6f}")
         print(f"    Max:  {stats['max_error_px']:.6f}")
         print(f"    Std:  {stats['std_error_px']:.6f}")

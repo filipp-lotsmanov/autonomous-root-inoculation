@@ -51,3 +51,8 @@ runs/
 
 # Environment
 .env
+
+
+#Linting and Test cache
+.ruff_cache/
+.pytest_cache/

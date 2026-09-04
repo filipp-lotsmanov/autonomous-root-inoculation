@@ -4,7 +4,10 @@ version = "1.0.0"
 description = "Autonomous root inoculation system: U-Net segmentation, PID/RL robot control, and integrated pipeline for the OT-2 platform"
 readme = "README.md"
 license = { text = "MIT" }
-requires-python = ">=3.12"
+# Upper bound is real, not caution: the released U-Net weights are a Keras 2
+# HDF5 file that needs NumPy 1.x, which caps TensorFlow at 2.18, and that
+# release publishes cp312 wheels only. Python 3.13 cannot resolve.
+requires-python = ">=3.12,<3.13"
 authors = [
     { name = "Filipp Lotsmanov" }
 ]
@@ -46,3 +49,24 @@ override-dependencies = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+# Ruff's default selection: pyflakes plus the pycodestyle rules that flag real
+# errors rather than formatting preferences.
+select = ["E4", "E7", "E9", "F"]
+
+[tool.ruff.lint.per-file-ignores]
+# Imports below module level are deliberate in these three files:
+#   train.py            imports the ML stack after task.execute_remotely(), so
+#                       the ClearML agent does not pay for them before it
+#                       re-executes the script remotely.
+#   main_execution.py   extend sys.path with the sibling source directories
+#   benchmark_system.py before importing modules from them.
+"controllers/rl/train.py" = ["E402"]
+"integration/main_execution.py" = ["E402"]
+"integration/benchmark_system.py" = ["E402"]

@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 from typing import List, Tuple, Dict
-from pid_controller import PIDController, simulator_units_to_meters
+from pid_controller import PIDController
 from validate_gains import VelocityRobotSimulator, calculate_metrics, run_step_response
 
 
@@ -33,7 +33,7 @@ def optimize_gains_for_axis(axis_name: str,
     print(f"Kp: {kp_range[0]} to {kp_range[1]} ({kp_range[2]} values)")
     print(f"Ki: {ki_range[0]} to {ki_range[1]} ({ki_range[2]} values)")
     print(f"Kd: {kd_range[0]} to {kd_range[1]} ({kd_range[2]} values)")
-    print(f"\nConstraints:")
+    print("\nConstraints:")
     print(f"  Max overshoot: {max_overshoot}%")
     print(f"  Max settling time: {max_settling_time}s\n")
 
@@ -116,12 +116,12 @@ def print_top_results(results: List[Dict], axis_name: str,
         # stored number, so the comparison below reflects this run.
         baseline = measure_gains(axis_name, baseline_gains)
 
-        print(f"\nBest Configuration:")
+        print("\nBest Configuration:")
         print(f"  Kp={best['Kp']:.2f}, Ki={best['Ki']:.2f}, Kd={best['Kd']:.2f}")
         print(f"  Error: {best['error_mm']:.5f} mm")
         print(f"  Overshoot: {best['overshoot']:.1f}%")
         print(f"  Settling time: {best['settling_time']:.2f}s")
-        print(f"\nBaseline Configuration (measured this run):")
+        print("\nBaseline Configuration (measured this run):")
         print(f"  Kp={baseline_gains[0]:.2f}, Ki={baseline_gains[1]:.2f}, Kd={baseline_gains[2]:.2f}")
         print(f"  Error: {baseline['error_mm']:.5f} mm")
         print(f"  Overshoot: {baseline['overshoot_percent']:.1f}%")

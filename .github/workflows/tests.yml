@@ -1,0 +1,64 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      # Lint only. `ruff format --check` is deliberately not enforced: the
+      # existing code predates any formatter and adopting one would restyle
+      # every file at once. Run `uvx ruff format .` as a separate, deliberate
+      # commit if you want that, then add the check here.
+      - name: Lint
+        run: uvx ruff check --output-format github .
+
+  test:
+    # Python is pinned to 3.12 rather than matrixed: the released U-Net weights
+    # are a Keras 2 HDF5 file needing NumPy 1.x, which caps TensorFlow at 2.18,
+    # and that release ships cp312 wheels only. The matrix covers operating
+    # systems instead, where the real portability risks are (path handling and
+    # the matplotlib backend).
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+    env:
+      # No display on the runners; force matplotlib's non-interactive backend.
+      MPLBACKEND: Agg
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install dependencies
+        run: uv sync --extra dev --locked
+
+      - name: Run tests
+        run: uv run pytest -v
+
+      - name: Verify PID scripts run end to end
+        working-directory: controllers/pid
+        run: |
+          uv run python validate_gains.py
+          uv run python optimize_gains.py

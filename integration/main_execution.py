@@ -16,7 +16,7 @@ sys.path.extend([
 # Module imports
 import system_config as cfg
 from spatial_transform import SpatialTransformationEngine, GeometricParameters
-from inoculation_orchestrator import AutomatedInoculationOrchestrator, MotionController, build_orchestrator
+from inoculation_orchestrator import build_orchestrator
 from pid_controller import ThreeAxisPIDController
 
 

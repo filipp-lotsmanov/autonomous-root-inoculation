@@ -20,7 +20,7 @@ sys.path.extend([
 # Import system modules
 import system_config as cfg
 from spatial_transform import SpatialTransformationEngine, GeometricParameters
-from inoculation_orchestrator import AutomatedInoculationOrchestrator, MotionController, build_orchestrator
+from inoculation_orchestrator import build_orchestrator
 from pid_controller import ThreeAxisPIDController
 
 
@@ -51,7 +51,7 @@ class SystemBenchmark:
         self.all_runs = []
         self.aggregate_stats = {}
 
-        print(f"Configuration:")
+        print("Configuration:")
         print(f"  Number of runs: {num_runs}")
         print(f"  Output directory: {self.output_dir}")
     
@@ -195,7 +195,7 @@ class SystemBenchmark:
     def _extract_run_statistics(self, results: pd.DataFrame, run_id: int, 
                                 plate_name: str, exec_time: float) -> dict:
         """Extract statistics from single run."""
-        successful = results[results['Success'] == True]
+        successful = results[results['Success'] == True]  # noqa: E712
         
         stats = {
             'run_id': run_id,
@@ -315,7 +315,7 @@ def main():
     benchmark.execute_benchmark_suite()
 
     print(f"\nResults saved to: {benchmark.output_dir}")
-    print(f"\nTo visualize results, run:")
+    print("\nTo visualize results, run:")
     print(f"  python visualize_benchmarks.py {benchmark.output_dir}")
 
 

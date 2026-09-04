@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
-import sys
-import tensorflow as tf
 
 
 # Import configuration
@@ -49,13 +47,13 @@ def check_environment():
         issues.append(" TensorFlow not installed")
     
     try:
-        from scipy.ndimage import label
+        from scipy.ndimage import label  # noqa: F401  availability probe
         print(" SciPy installed")
     except ImportError:
         issues.append(" SciPy not installed")
     
     try:
-        from skimage.morphology import skeletonize
+        from skimage.morphology import skeletonize  # noqa: F401  availability probe
         print(" scikit-image installed")
     except ImportError:
         issues.append(" scikit-image not installed")
@@ -143,7 +141,7 @@ def detect_plant_positions_auto(image_path):
     
     detected_positions = [x for x, y, a in shoots]
     
-    print(f"Detected plant x-positions:")
+    print("Detected plant x-positions:")
     for i, x in enumerate(detected_positions, 1):
         print(f"  Plant {i}: x = {x}")
     
@@ -222,8 +220,8 @@ Spacings:
     
     plt.tight_layout()
     plt.savefig('setup_plant_detection.png', dpi=150, bbox_inches='tight')
-    print(f" Visualization saved: setup_plant_detection.png")
-    plt.show()
+    print(" Visualization saved: setup_plant_detection.png")
+    plt.close()
     
     if len(detected_positions) < 2:
         return None
@@ -326,7 +324,7 @@ def test_single_image():
         total_pixels = mask.size
         root_pct = root_pixels / total_pixels * 100
         
-        print(f"Test successful")
+        print("Test successful")
         print(f" Mask shape: {mask.shape}")
         print(f" Root coverage: {root_pct:.2f}%")
         
@@ -348,12 +346,13 @@ def test_single_image():
         
         plt.tight_layout()
         plt.savefig('setup_test_result.png', dpi=150, bbox_inches='tight')
-        plt.show()
+        print(" Visualization saved: setup_test_result.png")
+        plt.close()
         
         return True
         
     except Exception as e:
-        print(f" Test failed with error:")
+        print(" Test failed with error:")
         print(f"   {str(e)}")
         return False
 

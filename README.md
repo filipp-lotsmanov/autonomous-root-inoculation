@@ -114,7 +114,7 @@ autonomous-root-inoculation/
 │   ├── test_spatial_transform.py   # Pixel ↔ robot round-trip and scaling
 │   └── test_root_measurement.py    # Length and tip location vs known masks
 │
-├── .github/workflows/tests.yml # CI: pytest + PID scripts on every push
+├── .github/workflows/tests.yml # CI: ruff lint, then pytest + PID scripts on Linux and Windows
 ├── pyproject.toml
 ├── uv.lock
 ├── .python-version            # Pins Python 3.12 (required for model compatibility)
@@ -176,8 +176,9 @@ uv run pytest
 pixel↔robot transform (round-trip consistency, affinity, scale), and root
 length and tip measurement against synthetic masks with known ground truth.
 Two tests pin the steady-state errors quoted in the README so a regression in
-the controller shows up as a test failure. Run on every push by
-[GitHub Actions](.github/workflows/tests.yml).
+the controller shows up as a test failure. Run on every push by [GitHub Actions](.github/workflows/tests.yml), which
+also lints with [ruff](https://docs.astral.sh/ruff/) and runs the suite on
+both Linux and Windows.
 
 ## Technical Highlights
 
