@@ -37,7 +37,9 @@ plots/
 Kaggle/
 pipeline_results/
 Integration_pipeline/
-cv_pipeline/
+# Anchored to the repo root: unanchored 'cv_pipeline/' also matched the
+# tracked results/cv_pipeline/ directory and silently excluded it.
+/cv_pipeline/
 benchmark_results/
 setup_plant_detection.png
 setup_test_result.png
@@ -56,3 +58,8 @@ runs/
 #Linting and Test cache
 .ruff_cache/
 .pytest_cache/
+
+# Dataset-derived imagery: the NPEC plate images are not redistributable,
+# so U-Net prediction overlays stay local.
+results/cv_pipeline/unet_prediction_sample.png
+results/cv_pipeline/unet_test_prediction.png

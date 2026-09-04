@@ -98,7 +98,7 @@ autonomous-root-inoculation/
 │   └── visualize_benchmarks.py
 │
 ├── results/                   # Pre-computed outputs and visualizations
-│   ├── cv_pipeline/           # Kaggle score, U-Net predictions
+│   ├── cv_pipeline/           # Kaggle leaderboard score
 │   ├── pid_performance/       # Step response and optimization plots
 │   ├── integration_benchmarks/ # Benchmark dashboard and per-run results
 │   └── demos/                 # System demonstration GIFs

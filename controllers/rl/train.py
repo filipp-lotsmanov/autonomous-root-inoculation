@@ -185,7 +185,7 @@ env = OT2Env(
     render=False,
     max_steps=args.max_steps_truncate,
     target_threshold=args.target_threshold,
-    reward_type=args.reward_type  # ADD THIS LINE
+    reward_type=args.reward_type
 )
 
 # ============================================================================
