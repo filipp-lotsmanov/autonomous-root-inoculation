@@ -172,16 +172,33 @@ def execute_workflow():
     print(f"\nFiltering CSV for: {target_plate_name}")
     full_dataset = pd.read_csv(cfg.ROOT_TIP_COORDINATES_CSV)
     plate_specific_data = full_dataset[full_dataset['Image'] == target_plate_name].copy()
-    
+
+    print(f"  Full dataset: {len(full_dataset)} entries")
+    print(f"  Current plate: {len(plate_specific_data)} entries")
+
+    # The CSV's Image column has to hold the same filenames the simulator loads
+    # as plate textures. When it does not, the filter silently empties and the
+    # run is pointless, so report the mismatch instead of continuing.
+    if plate_specific_data.empty:
+        print("\n No CSV rows match the loaded plate.")
+        print(f"  Simulator plate:  {target_plate_name}")
+        print(f"  CSV holds {full_dataset['Image'].nunique()} distinct image name(s), e.g.:")
+        for name in full_dataset['Image'].drop_duplicates().head(3):
+            print(f"    {name}")
+        print("\n  Run the CV pipeline over the same images the simulator uses:")
+        print("    the plate textures in textures/_plates/")
+        sim.close()
+        return
+
+    if 'Detected' in plate_specific_data.columns:
+        print(f"  Valid targets: {plate_specific_data['Detected'].sum()}")
+
     # Create temporary filtered CSV
     temp_csv_location = cfg.INTEGRATION_OUTPUT_DIR / 'active_targets.csv'
     cfg.INTEGRATION_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     plate_specific_data.to_csv(temp_csv_location, index=False)
-    
-    print(f"  Full dataset: {len(full_dataset)} entries")
-    print(f"  Current plate: {len(plate_specific_data)} entries")
-    print(f"  Valid targets: {plate_specific_data['Detected'].sum()}")
-    
+
+
     try:
         # Execute autonomous sequence
         execution_results = orchestrator.execute_inoculation_sequence(

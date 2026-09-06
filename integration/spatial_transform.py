@@ -190,7 +190,16 @@ class SpatialTransformationEngine:
         
         data = pd.read_csv(csv_filepath)
         print(f"  Loaded {len(data)} entries")
-        
+
+        if data.empty:
+            # Return an empty frame with the expected columns so callers can
+            # test len() instead of hitting a reduction over a zero-size array.
+            print("  Nothing to transform - no rows in input")
+            for column in ('Robot X (m)', 'Robot Y (m)', 'Robot Z (m)',
+                           'Radial Distance (m)'):
+                data[column] = pd.Series(dtype=float)
+            return data
+
         if 'Detected' in data.columns:
             detected_count = data['Detected'].sum()
             print(f"  Valid detections: {detected_count}/{len(data)}")

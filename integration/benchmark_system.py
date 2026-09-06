@@ -310,13 +310,27 @@ def main():
 
     args = parser.parse_args()
 
+    # Validate before starting: every run loads the simulator and reads the
+    # root tip CSV, so a missing input would otherwise fail identically once
+    # per run instead of reporting the problem up front.
+    cfg.display_configuration()
+    if not cfg.verify_configuration():
+        print("\nConfiguration invalid - not starting the benchmark.")
+        print("The root tip CSV is produced by the CV pipeline:")
+        print("    cd segmentation && uv run python run_pipeline.py")
+        sys.exit(1)
+
     # Create and run benchmark
     benchmark = SystemBenchmark(num_runs=args.runs, output_dir=args.output)
     benchmark.execute_benchmark_suite()
 
+    if not benchmark.all_runs:
+        print("\nNo successful runs - nothing to visualize.")
+        sys.exit(1)
+
     print(f"\nResults saved to: {benchmark.output_dir}")
     print("\nTo visualize results, run:")
-    print(f"  python visualize_benchmarks.py {benchmark.output_dir}")
+    print(f"  uv run python visualize_benchmarks.py {benchmark.output_dir}")
 
 
 if __name__ == "__main__":

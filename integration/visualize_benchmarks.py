@@ -18,7 +18,11 @@ def load_benchmark_data(results_dir):
     # Find summary file
     summary_files = list(results_path.glob('benchmark_summary_*.csv'))
     if not summary_files:
-        raise FileNotFoundError(f"No benchmark summary found in {results_dir}")
+        raise FileNotFoundError(
+            f"No benchmark_summary_*.csv in {results_dir}. "
+            "benchmark_system.py only writes a summary when at least one run "
+            "succeeds, so either it has not been run yet or every run failed."
+        )
     
     summary_file = sorted(summary_files)[-1]  # Most recent
     print(f"Loading: {summary_file.name}")

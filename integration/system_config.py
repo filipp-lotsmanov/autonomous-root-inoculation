@@ -8,9 +8,29 @@ import numpy as np
 
 BASE_DIR = Path(__file__).parent.parent
 TEXTURE_REPOSITORY = BASE_DIR / "textures" / "_plates"
-# run_pipeline.py is executed from segmentation/ and writes its outputs there.
-PIPELINE_OUTPUT_DIR = BASE_DIR / "segmentation" / "pipeline_results"
 INTEGRATION_OUTPUT_DIR = BASE_DIR / "Integration_pipeline" / "integration_results"
+
+# run_pipeline.py writes its outputs relative to the directory it is launched
+# from: under segmentation/ when run as the README documents, at the repo root
+# when run from there. Accept either rather than hard-coding one, so results
+# produced by a valid invocation are never silently invisible to the robot
+# side. When both exist the most recently written wins, which makes
+# regenerating the CSV take effect regardless of where it was run from.
+CANDIDATE_PIPELINE_OUTPUT_DIRS = (
+    BASE_DIR / "segmentation" / "pipeline_results",
+    BASE_DIR / "pipeline_results",
+)
+
+
+def _resolve_pipeline_output_dir() -> Path:
+    present = [d for d in CANDIDATE_PIPELINE_OUTPUT_DIRS
+               if (d / "root_tips_pixels.csv").is_file()]
+    if not present:
+        return CANDIDATE_PIPELINE_OUTPUT_DIRS[0]
+    return max(present, key=lambda d: (d / "root_tips_pixels.csv").stat().st_mtime)
+
+
+PIPELINE_OUTPUT_DIR = _resolve_pipeline_output_dir()
 
 # Data sources
 ROOT_TIP_COORDINATES_CSV = PIPELINE_OUTPUT_DIR / "root_tips_pixels.csv"
@@ -173,7 +193,9 @@ def verify_configuration():
         issues.append(f"Pipeline output directory missing: {PIPELINE_OUTPUT_DIR}")
     
     if not ROOT_TIP_COORDINATES_CSV.exists():
-        issues.append(f"Root tip CSV not found: {ROOT_TIP_COORDINATES_CSV}")
+        searched = "; ".join(str(d / "root_tips_pixels.csv")
+                             for d in CANDIDATE_PIPELINE_OUTPUT_DIRS)
+        issues.append(f"Root tip CSV not found. Searched: {searched}")
     
     # Workspace validation
     if not (WORKSPACE_BOUNDS['x'][0] <= DISH_CENTER_POSITION[0] <= WORKSPACE_BOUNDS['x'][1]):
