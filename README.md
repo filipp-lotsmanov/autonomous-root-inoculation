@@ -7,7 +7,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 [![tests](https://github.com/filipp-lotsmanov/autonomous-root-inoculation/actions/workflows/tests.yml/badge.svg)](https://github.com/filipp-lotsmanov/autonomous-root-inoculation/actions/workflows/tests.yml)
 
-![Demo](results/demos/integration_demo_1.gif)
+![Demo](results/demos/integration_demo_2.gif)
 
 End-to-end computer vision and robotics pipeline for automated root inoculation on the Opentrons OT-2 platform. The system detects plant root tips in petri dish images using U-Net segmentation, transforms pixel coordinates to robot workspace positions, and navigates a robotic pipette to each target with sub-millimeter accuracy.
 
